@@ -168,7 +168,8 @@
             server (-> (create-app config-m stores-m blockchain)
                        (server/run-server {:port (config/port config-m)
                                            :host (config/host config-m)}))]
-        (assoc app-state :server server)))))
+        (assoc app-state :server server)
+        (assoc app-state :stores-m stores-m)))))
 
 (defn halt [app-state]
   (when-let [server (:server app-state)]
@@ -181,6 +182,11 @@
 
 (defn stop []
   (swap! app-state (comp disconnect-db halt)))
+
+(defn empty-db []
+  (if-let [stores-m (:stores-m @app-state)]
+    (storage/empty-db-stores stores-m)
+    (println "No db found")))
 
 ;; For running using lein-ring server
 (defonce lein-ring-handler (atom nil))

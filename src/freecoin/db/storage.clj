@@ -14,3 +14,7 @@
 
 (defn get-confirmation-store [stores-m]
   (:confirmation-store stores-m))
+
+(defn empty-db-stores [stores-m]
+  (m/delete-all! (get-wallet-store stores-m))
+  (m/delete-all! (get-confirmation-store stores-m)))

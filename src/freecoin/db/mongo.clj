@@ -49,7 +49,9 @@
   (query [e query]
     "Items are returned using a query map")
   (delete! [e k]
-    "Delete item based on primary id"))
+    "Delete item based on primary id")
+  (delete-all! [e]
+    "Delete all items from a coll"))
 
 (defrecord MongoStore [mongo-db coll]
   FreecoinStore
@@ -74,7 +76,10 @@
 
   (delete! [this k]
     (when k
-      (mc/remove-by-id mongo-db coll k))))
+      (mc/remove-by-id mongo-db coll k)))
+
+  (delete-all! [this]
+    (mc/remove mongo-db coll)))
 
 (defn create-mongo-store [mongo-db coll]
   (MongoStore. mongo-db coll))
