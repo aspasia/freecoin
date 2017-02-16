@@ -35,11 +35,13 @@
   {:address "fork"
    :port 8000})
 
+;; TODO do we need this?
 (defn- get-mongo-uri []
   (let [mongo-ip (get env/env :mongo-port-27017-tcp-addr "localhost")
         db-name "fxctest1"]
     (format "mongodb://%s:27017/%s" mongo-ip db-name)))
 
+;; TODO do we need this?
 (def webapp
   {:db-config {:url (get-mongo-uri)}
 
