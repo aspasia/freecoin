@@ -158,6 +158,11 @@
     (prn "WIP: disconnect db"))
   (dissoc app-state :db))
 
+(defn disconnect-stores [app-state]
+  (when (:stores-m app-state)
+    (prn "WIP: disconnect stores"))
+  (dissoc app-state :stores-m))
+
 (defn launch [app-state]
   (if (:server app-state)
     app-state
@@ -168,20 +173,25 @@
             server (-> (create-app config-m stores-m blockchain)
                        (server/run-server {:port (config/port config-m)
                                            :host (config/host config-m)}))]
-        (assoc app-state :server server)
-        (assoc app-state :stores-m stores-m)))))
+        
+        (assoc app-state
+               :server server
+               :stores-m stores-m)))))
 
 (defn halt [app-state]
   (when-let [server (:server app-state)]
-    (server))
-  (dissoc app-state :server))
+    (prn "Stopping ring server")
+    (server)
+    (prn "Ring server stopped")
+    (dissoc app-state :server))
+  (prn "There was no Ring server to stop"))
 
 ;; For running from the repl
 (defn start []
   (swap! app-state (comp launch connect-db)))
 
 (defn stop []
-  (swap! app-state (comp disconnect-db halt)))
+  (swap! app-state (comp disconnect-db disconnect-stores halt)))
 
 (defn empty-db []
   (if-let [stores-m (:stores-m @app-state)]
