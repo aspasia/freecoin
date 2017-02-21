@@ -96,7 +96,7 @@
      :sso-callback                  (sign-in/sso-callback wallet-store blockchain sso-configuration)
      :sign-out                      sign-in/sign-out
      :forget-secret                 sign-in/forget-secret
-     :account                       (participants/account      wallet-store blockchain)
+     :account                       (participants/account wallet-store blockchain)
      :get-participant-search-form   (participants/query-form   wallet-store)
      :participants                  (participants/participants wallet-store)
 
@@ -185,8 +185,7 @@
     (prn "Stopping ring server")
     (server)
     (prn "Ring server stopped")
-    (dissoc app-state :server))
-  (prn "There was no Ring server to stop"))
+    (dissoc app-state :server)))
 
 ;; For running from the repl
 (defn start []
