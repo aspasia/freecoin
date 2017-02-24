@@ -12,4 +12,9 @@
 
       (fact "Checking that the account route doesn't work for something else"
             (bidi/match-route routes/routes (str "/account/" "something-else") :request-method :get)  =>
-            nil))
+            nil)
+
+      (fact "Checking that the bidi path is created correctly"
+            (apply bidi/path-for routes/routes
+                   :get-user-transactions '(:email "test@mail.com"))
+            => (str "/transactions/test@mail.com")))
